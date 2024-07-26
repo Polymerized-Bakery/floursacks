@@ -1,6 +1,8 @@
 package olivermakesco.de.servback;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,17 +47,17 @@ public class GlobalBackpackItem extends Item implements PolymerItem {
         return Items.CRAFTING_TABLE;
     }
 
-    /**
-     * Returns main/default item used on client for specific player
-     *
-     * @param itemStack ItemStack of virtual item
-     * @param player    Player for which it's send
-     * @return Vanilla (or other) Item instance
-     */
+    @Override
+    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        return getPolymerItem();
+    }
+
     @Override
     public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipType tooltipType, RegistryWrapper.WrapperLookup lookup, @Nullable ServerPlayerEntity player) {
         ItemStack stack = PolymerItem.super.getPolymerItemStack(itemStack, tooltipType, lookup, player);
-        stack.setCustomName(Text.of("Global Backpack"));
+        ComponentMap.Builder newComp = ComponentMap.builder();
+        newComp.add(DataComponentTypes.CUSTOM_NAME, Text.literal("Global Backpack"));
+        stack.applyComponentsFrom(newComp.build());
         return stack;
     }
 }

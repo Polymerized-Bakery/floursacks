@@ -1,6 +1,9 @@
 package olivermakesco.de.servback;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -68,10 +71,13 @@ public class BackpackItem extends Item implements PolymerItem {
 
     public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipType tooltipType, RegistryWrapper.WrapperLookup lookup, @Nullable ServerPlayerEntity player) {
         ItemStack stack = PolymerItem.super.getPolymerItemStack(itemStack, tooltipType, lookup, player);
-        NbtCompound nbt = stack.getOrCreateNbt().copy();
-        nbt.putInt("backpack",slots/9);
-        stack.setNbt(nbt);
-        stack.setCustomName(itemStack.getName());
+        // TODO: MAKE THIS WORK
+         NbtCompound nbt = stack.getOrCreateNbt().copy();
+         nbt.putInt("backpack",slots/9); // set inventory size
+
+        ComponentMap.Builder newComp = ComponentMap.builder();
+        newComp.add(DataComponentTypes.CUSTOM_NAME, Text.literal("Backpack"));
+        stack.applyComponentsFrom(newComp.build());
         return stack;
     }
 }

@@ -1,6 +1,8 @@
 package olivermakesco.de.servback;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,7 +51,9 @@ public class EnderBackpackItem extends Item implements PolymerItem {
     @Override
     public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipType tooltipType, RegistryWrapper.WrapperLookup lookup, @Nullable ServerPlayerEntity player) {
         ItemStack stack = PolymerItem.super.getPolymerItemStack(itemStack, tooltipType, lookup, player);
-        stack.setCustomName(Text.of("Ender Backpack"));
+        ComponentMap.Builder newComp = ComponentMap.builder();
+        newComp.add(DataComponentTypes.CUSTOM_NAME, Text.literal("Ender Backpack"));
+        stack.applyComponentsFrom(newComp.build());
         return stack;
     }
 }
