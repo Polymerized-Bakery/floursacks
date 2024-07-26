@@ -2,7 +2,6 @@ package olivermakesco.de.servback;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -10,12 +9,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -25,12 +24,12 @@ public class Entrypoint implements ModInitializer {
 	public void onInitialize() {
 		for (String s : backpacks.keySet()) {
 			int i = backpacks.get(s);
-			Identifier id = new Identifier("serverbackpacks",s);
-			Item item = new BackpackItem(new FabricItemSettings(), i);
-			Registry.register(Registry.ITEM,id,item);
+			Identifier id = Identifier.of("serverbackpacks",s);
+			Item item = new BackpackItem(new Item.Settings(), i);
+			Registry.register(Registries.ITEM ,  id,item);
 		}
-		Registry.register(Registry.ITEM,new Identifier("serverbackpacks","ender"), new EnderBackpackItem(new FabricItemSettings()));
-		Registry.register(Registry.ITEM,new Identifier("serverbackpacks","global"), new GlobalBackpackItem(new FabricItemSettings()));
+		Registry.register(Registries.ITEM,Identifier.of("serverbackpacks","ender"), new EnderBackpackItem(new Item.Settings()));
+		Registry.register(Registries.ITEM,Identifier.of("serverbackpacks","global"), new GlobalBackpackItem(new Item.Settings()));
 
 		ServerLifecycleEvents.SERVER_STARTING.register((s) -> {
 			server = s;
@@ -63,7 +62,7 @@ public class Entrypoint implements ModInitializer {
 				if (stack == null) stack = ItemStack.EMPTY;
 				inv.set(i,stack);
 			}
-			NbtCompound invNbt = Inventories.writeNbt(new NbtCompound(), inv,true);
+            NbtCompound invNbt = Inventories.writeNbt(new NbtCompound(), inv);
 			NbtIo.writeCompressed(invNbt,out);
 		} catch (Exception ignored) {}
 	}

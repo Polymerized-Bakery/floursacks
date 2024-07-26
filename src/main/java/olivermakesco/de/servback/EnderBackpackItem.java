@@ -1,11 +1,13 @@
 package olivermakesco.de.servback;
 
-import eu.pb4.polymer.item.VirtualItem;
+import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -15,7 +17,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class EnderBackpackItem extends Item implements VirtualItem {
+public class EnderBackpackItem extends Item implements PolymerItem {
     public EnderBackpackItem(Settings settings) {
         super(settings.maxCount(1));
     }
@@ -40,13 +42,13 @@ public class EnderBackpackItem extends Item implements VirtualItem {
     }
 
     @Override
-    public Item getVirtualItem() {
+    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
         return Items.ENDER_CHEST;
     }
 
     @Override
-    public ItemStack getVirtualItemStack(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        ItemStack stack = VirtualItem.super.getVirtualItemStack(itemStack, player);
+    public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipType tooltipType, RegistryWrapper.WrapperLookup lookup, @Nullable ServerPlayerEntity player) {
+        ItemStack stack = PolymerItem.super.getPolymerItemStack(itemStack, tooltipType, lookup, player);
         stack.setCustomName(Text.of("Ender Backpack"));
         return stack;
     }

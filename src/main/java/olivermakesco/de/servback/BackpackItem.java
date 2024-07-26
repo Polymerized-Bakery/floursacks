@@ -1,12 +1,14 @@
 package olivermakesco.de.servback;
 
-import eu.pb4.polymer.item.VirtualItem;
+import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -16,7 +18,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class BackpackItem extends Item implements VirtualItem {
+public class BackpackItem extends Item implements PolymerItem {
     int slots;
     String name;
 
@@ -55,19 +57,17 @@ public class BackpackItem extends Item implements VirtualItem {
         return ActionResult.PASS;
     }
 
-    @Override
-    public Item getVirtualItem() {
+    public Item getPolymerItem() {
         return Items.BUNDLE;
     }
 
     @Override
-    public Item getVirtualItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return getVirtualItem();
+    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        return getPolymerItem();
     }
 
-    @Override
-    public ItemStack getVirtualItemStack(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        ItemStack stack = VirtualItem.super.getVirtualItemStack(itemStack, player);
+    public ItemStack getPolymerItemStack(ItemStack itemStack, TooltipType tooltipType, RegistryWrapper.WrapperLookup lookup, @Nullable ServerPlayerEntity player) {
+        ItemStack stack = PolymerItem.super.getPolymerItemStack(itemStack, tooltipType, lookup, player);
         NbtCompound nbt = stack.getOrCreateNbt().copy();
         nbt.putInt("backpack",slots/9);
         stack.setNbt(nbt);
